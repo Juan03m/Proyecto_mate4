@@ -6,19 +6,14 @@ from scipy import stats as st
 # ej: df = pd.read_csv('tu_archivo.csv')
 
 
-def calculo_regresion_lineal_simple(X):
-
     # Ejemplo de DataFrame
 
-data = {
-    'Publicidad_X': [10, 12, 15, 18, 22, 25, 28, 30, 35, 40],
-    'Ventas_Y': [88, 90, 95, 100, 105, 110, 115, 120, 130, 140]
-}
-df = pd.DataFrame(data)
+
+df = pd.read_csv("../data/student_scores.csv")
 
 # Define tus columnas X e Y
-variables_predictoras = ['col1', 'col2', 'col3']
-variable_respuesta= 'Examn_Score'
+variables_predictoras = ['Previous_Scores', 'Attendance', 'Hours_Studied']
+variable_respuesta= 'Exam_Score'
 
 # --- 2. ESTADÍSTICOS BÁSICOS ---
 X = df[variables_predictoras]
