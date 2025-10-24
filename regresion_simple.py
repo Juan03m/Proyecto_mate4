@@ -49,6 +49,11 @@ def calculo_regresion_lineal_simple(X,Y,x_asterisco):
     parteA = estimador_beta_0 + estimador_beta_1 * x_asterisco
     parteB = t_student * np.sqrt(sigma_cuadrado_est * (1/n + (x_asterisco - x_promedio)**2 / Sxx))
     IC_respuesta_media = (parteA - parteB, parteA + parteB)
+
+    # 6.d. IP(Y) para una nueva predicción Y en X* 
+    ME_prediccion = t_student * np.sqrt(sigma_cuadrado_est * (1 + 1/n + (x_asterisco - x_promedio)**2 / Sxx))
+    IP_Y = (parteA - ME_prediccion, parteA + ME_prediccion)
+
     # --- 7. IMPRESIÓN DE RESULTADOS ---
     print("--- REGRESIÓN LINEAL SIMPLE ---")
     print(f"observaciones:{n}")
@@ -76,15 +81,20 @@ def calculo_regresion_lineal_simple(X,Y,x_asterisco):
     print(f"IC para β0 (Intercepto): ({IC_beta_0[0]:.4f}, {IC_beta_0[1]:.4f})")
 
     print(f"\n--- IC para Respuesta Media en X* = {x_asterisco:.2f} ---") # (Moví este print de tu bucle)
-    print(f"ICY: ({IC_respuesta_media[0]:.4f}, {IC_respuesta_media[1]:.4f})") 
-
+    print(f"ICM(Y): ({IC_respuesta_media[0]:.4f}, {IC_respuesta_media[1]:.4f})") 
+    print (f"IP(Y): ({IP_Y[0]:.4f}, {IP_Y[1]:.4f})")
 
 
 ## aclarar por que usamos x asterisco asi 
-def calcularX_asterisco(X, Y):
-    diferencias_abs = (X - Y).abs()
+def calcularX_asterisco(X):
+    x_media = X.mean()
+    
+    diferencias_abs = (X - x_media).abs()
+    
     indice_mas_cercano = diferencias_abs.idxmin()
+    
     x_asterisco = X.loc[indice_mas_cercano]
+    
     return x_asterisco
 
 
@@ -106,7 +116,7 @@ Y = df[variable_respuesta]
 for col in variables_predictoras:
     print(f"\n\n--- Análisis para la variable predictora: {col} ---")
     X_columna = df[col]
-    x_asterisco = calcularX_asterisco(X_columna, Y) 
+    x_asterisco = calcularX_asterisco(X_columna) 
     Y = df[variable_respuesta]
 
     calculo_regresion_lineal_simple(df[col], Y, x_asterisco=x_asterisco)
